@@ -10,7 +10,7 @@ A timed quiz to test your coding knowledge. Try to get the high score! (Scores s
 
 ## Website
 https://mattparker124.github.io/timed-coding-quiz/
-![page_screenshot](/images/preview.png)
+![page screenshot](assets/images/preview.png)
 
 ## Contribution
 Made by Matthew Parker
