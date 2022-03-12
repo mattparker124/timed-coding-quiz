@@ -2,6 +2,8 @@ let pageContentEl = document.querySelector("#page-content");
 let timer = document.querySelector("#timer");
 let currentTime = 0;
 let currentQuestion = 0;
+let numRight = 0;
+let intervalID;
 let scores = [];
 
 const questions = [
@@ -11,6 +13,7 @@ const questions = [
         answerTwo: "Answer Two",
         answerThree: "Answer Three",
         answerFour: "Answer Four",
+        correctAnswer: "2",
     },
     {
         question: "Sample Question Two",
@@ -18,6 +21,7 @@ const questions = [
         answerTwo: "Answer Two",
         answerThree: "Answer Three",
         answerFour: "Answer Four",
+        correctAnswer: "2",
     },
     {
         question: "Sample Question Three",
@@ -25,6 +29,7 @@ const questions = [
         answerTwo: "Answer Two",
         answerThree: "Answer Three",
         answerFour: "Answer Four",
+        correctAnswer: "2",
     },
     {
         question: "Sample Question Four",
@@ -32,6 +37,7 @@ const questions = [
         answerTwo: "Answer Two",
         answerThree: "Answer Three",
         answerFour: "Answer Four",
+        correctAnswer: "2",
     },
     {
         question: "Sample Question Five",
@@ -39,6 +45,7 @@ const questions = [
         answerTwo: "Answer Two",
         answerThree: "Answer Three",
         answerFour: "Answer Four",
+        correctAnswer: "2",
     },
 ];
 
@@ -50,6 +57,20 @@ let buttonHandler = function(event) {
     // start quiz button was clicked
     if (targetEl.matches(".start-btn")) {
         beginQuiz();
+    } else if (targetEl.matches(".answer-btn")) {
+        if (questions[currentQuestion].correctAnswer === targetEl.getAttribute("data-answer-id")) {
+            numRight++;
+        } else {
+            currentTime = currentTime - 30;
+        }
+        currentQuestion++;
+        if (!questions[currentQuestion]) {
+            clearInterval(intervalID);
+            intervalID = null;
+            endQuiz();
+        } else {
+            displayQuestion();
+        }
     }
 }
 
@@ -59,8 +80,35 @@ let beginQuiz = function() {
     currentTime = 60;
     timerManager();
 
+    // set score to 0
+    numRight = 0;
+
     // load the first question
+    currentQuestion = 0;
     displayQuestion();
+}
+let endQuiz = function() {
+    clearScreen();
+
+    var quizCompleteEl = document.createElement("div");
+    quizCompleteEl.className = "page-content-text";
+    quizCompleteEl.innerHTML = "You have finished the quiz! :D<br><br>Your final score is: " + numRight + "<br>Would you like to save your score?";
+
+    var endButtonsEl = document.createElement("div");
+    endButtonsEl.className = "end-buttons-holder";
+
+    var submitButtonEl = document.createElement("button");
+    submitButtonEl.textContent = "Submit your score!";
+    submitButtonEl.className = "btn end-btn submit-btn";
+
+    var againButtonEl = document.createElement("button");
+    againButtonEl.textContent = "Try again!";
+    againButtonEl.className = "btn end-btn start-btn";
+
+    endButtonsEl.appendChild(submitButtonEl);
+    endButtonsEl.appendChild(againButtonEl);
+    pageContentEl.appendChild(quizCompleteEl);
+    pageContentEl.appendChild(endButtonsEl);
 }
 
 // load a question
@@ -69,7 +117,7 @@ let displayQuestion = function() {
 
     // create question region
     var questionHolderEl = document.createElement("div");
-    questionHolderEl.className = "question-holder";
+    questionHolderEl.className = "page-content-text";
     questionHolderEl.innerHTML = questions[currentQuestion].question;
 
     // create the four answers
@@ -104,16 +152,21 @@ let displayQuestion = function() {
 }
 
 let timerManager = function() {
-    setInterval(function() {
-        if (currentTime < 1) {
-            timer.innerHTML = "Time Remaining: 00";
-            clearInterval();
-        } else if (currentTime < 10) {
-            timer.innerHTML = "Time Remaining: 0" + currentTime--;
-        } else {
-            timer.innerHTML = "Time Remaining: " + currentTime--;
-        }
-    }, 1000)
+    if (!intervalID) {
+        intervalID = setInterval(function() {
+            if (currentTime < 1) {
+                timer.innerHTML = "Time Remaining: 00";
+                console.log(currentTime);
+                clearInterval(intervalID);
+                intervalID = null;
+                endQuiz();
+            } else if (currentTime < 10) {
+                timer.innerHTML = "Time Remaining: 0" + currentTime--;
+            } else {
+                timer.innerHTML = "Time Remaining: " + currentTime--;
+            }
+        }, 1000);
+    }
 }
 
 // prompt us so we can save our score
