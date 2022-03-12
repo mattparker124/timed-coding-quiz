@@ -1,4 +1,5 @@
 let pageContentEl = document.querySelector("#page-content");
+let timer = document.querySelector("#timer");
 let currentTime = 0;
 let scores = [];
 
@@ -13,9 +14,26 @@ let buttonHandler = function(event) {
     }
 }
 
+let timerManager = function() {
+    setInterval(function() {
+        if (currentTime < 1) {
+            timer.innerHTML = "Time Remaining: 00";
+            clearInterval();
+        } else if (currentTime < 10) {
+            timer.innerHTML = "Time Remaining: 0" + currentTime--;
+        } else {
+            timer.innerHTML = "Time Remaining: " + currentTime--;
+        }
+    }, 1000)
+}
+
 // start the quiz
 let beginQuiz = function() {
     clearScreen();
+
+    // set and start the timer
+    currentTime = 60;
+    timerManager();
 }
 
 // prompt us so we can save our score
