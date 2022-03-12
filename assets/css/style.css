@@ -102,6 +102,19 @@ header p {
     margin: 25px;
 }
 
+.scores-cont {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    padding: 15px;
+}
+
+.scores-cont li {
+    font-size: 3rem;
+    color: var(--quaternary);
+}
+
 .page-content {
     margin: 25px auto;
     width: 95%;

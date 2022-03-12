@@ -1,51 +1,53 @@
-let pageContentEl = document.querySelector("#page-content");
-let timer = document.querySelector("#timer");
+const pageContentEl = document.querySelector("#page-content");
+const timer = document.querySelector("#timer");
+
 let currentTime = 0;
 let currentQuestion = 0;
 let numRight = 0;
 let intervalID;
+
 let scores = [];
 
 const questions = [
     {
-        question: "Sample Questioneeeeeeeeeeeeeeeeeewqg ewgf qreg qerg erg qer gqwe gfqwe fqwe qwe r",
-        answerOne: "Answer One",
-        answerTwo: "Answer Two",
-        answerThree: "Answer Three",
-        answerFour: "Answer Four",
+        question: "Arrays in Javascript can be used to store _______",
+        answerOne: "Booleans",
+        answerTwo: "Objects",
+        answerThree: "Other arrays",
+        answerFour: "All of the above",
+        correctAnswer: "4",
+    },
+    {
+        question: "Which of these is not a data type",
+        answerOne: "Prompt",
+        answerTwo: "Boolean",
+        answerThree: "String",
+        answerFour: "Number",
+        correctAnswer: "1",
+    },
+    {
+        question: "Which of these would be a correct way to store the array 'cars' to local storage",
+        answerOne: `localStorage.getItem("cars", JSON.parse(cars));`,
+        answerTwo: `localStorage.setItem("cars", JSON.stringify(cars[i]));`,
+        answerThree: `localStorage.setItem("cars", JSON.stringify(cars));`,
+        answerFour: `localStorage.parse("cars", JSON.array(cars));`,
+        correctAnswer: "3",
+    },
+    {
+        question: "How do you wrap the condition of an if statement",
+        answerOne: "curly braces",
+        answerTwo: "parenthesis",
+        answerThree: "brackets",
+        answerFour: "hyphens",
         correctAnswer: "2",
     },
     {
-        question: "Sample Question Two",
-        answerOne: "Answer One",
-        answerTwo: "Answer Two",
-        answerThree: "Answer Three",
-        answerFour: "Answer Four",
-        correctAnswer: "2",
-    },
-    {
-        question: "Sample Question Three",
-        answerOne: "Answer One",
-        answerTwo: "Answer Two",
-        answerThree: "Answer Three",
-        answerFour: "Answer Four",
-        correctAnswer: "2",
-    },
-    {
-        question: "Sample Question Four",
-        answerOne: "Answer One",
-        answerTwo: "Answer Two",
-        answerThree: "Answer Three",
-        answerFour: "Answer Four",
-        correctAnswer: "2",
-    },
-    {
-        question: "Sample Question Five",
-        answerOne: "Answer One",
-        answerTwo: "Answer Two",
-        answerThree: "Answer Three",
-        answerFour: "Answer Four",
-        correctAnswer: "2",
+        question: "What is a good option for solving a coding problem you're having trouble with",
+        answerOne: "Reading the documentation online",
+        answerTwo: "Using AskBCS",
+        answerThree: "Talking with your classmates",
+        answerFour: "All of the above",
+        correctAnswer: "4",
     },
 ];
 
@@ -71,6 +73,8 @@ let buttonHandler = function(event) {
         } else {
             displayQuestion();
         }
+    } else if (targetEl.matches(".submit-btn")) {
+        saveScore();
     }
 }
 
@@ -172,11 +176,61 @@ let timerManager = function() {
 // prompt us so we can save our score
 let saveScore = function() {
 
+    // get user name and score
+    const userName = prompt("Enter your name:");
+    const userScore = {numRight, userName};
+
+    // add to the scores
+    scores.push(userScore);
+
+    // sort scores from highest to lowest
+    scores.sort(function (a, b) {
+        return b.numRight - a.numRight;
+    });
+
+    // remove any scores after the ten highest
+    scores.splice(10);
+
+    // save and display the high scores
+    localStorage.setItem("scores", JSON.stringify(scores));
+    clearScreen();
+
+    var highScoresEl = document.createElement("div");
+    highScoresEl.className = "scores-cont";
+
+    var highScoreTextEl = document.createElement("h2");
+    highScoreTextEl.innerHTML = "HIGH SCORES";
+    highScoreTextEl.className = "page-content-text";
+
+    var scoresListEl = document.createElement("ol");
+    scoresListEl.id = "highScores";
+    scoresListEl.innerHTML = scores.map((score) =>
+    `<li>${score.numRight} - ${score.userName}`
+    );
+
+    var buttonEl = document.createElement("div");
+    buttonEl.className = "end-buttons-holder";
+
+    var againButtonEl = document.createElement("button");
+    againButtonEl.textContent = "Try again!";
+    againButtonEl.className = "btn end-btn start-btn";
+
+    buttonEl.appendChild(againButtonEl);
+    highScoresEl.appendChild(scoresListEl);
+    pageContentEl.appendChild(highScoreTextEl);
+    pageContentEl.appendChild(highScoresEl);
+    pageContentEl.appendChild(buttonEl);
 }
 
-// load the scores onto the screen
+// load the scores when the page loads
 let loadScores = function() {
-
+    scores = localStorage.getItem("scores");
+    if (scores === null) {
+        scores = [];
+        console.log(scores);
+    } else {
+        scores = JSON.parse(scores);
+    }
 }
 
 // clear everything currently on the screen
@@ -189,3 +243,6 @@ let clearScreen = function() {
 
 // listen for when a button on the page is clicked
 pageContentEl.addEventListener("click", buttonHandler);
+
+// load the scores when the page loads
+loadScores();
