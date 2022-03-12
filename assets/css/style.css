@@ -16,9 +16,6 @@ body {
     background: var(--tertiary);
     margin: 0;
     padding: 0;
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
 }
 
 header {
@@ -70,12 +67,26 @@ header p {
     top: 0;
 }
 
-.page-content {
-    flex: 1;
+.question-holder {
+    color: var(--primary);
+    margin: 5px 0 20px;
+    text-align: center;
+    text-justify: auto;
+    font-size: 5rem;
+}
+
+.answer-holder {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+}
+
+.answer-btn {
+    margin: 25px;
+}
+
+.page-content {
     margin: 25px auto;
     width: 95%;
 }

@@ -1,7 +1,46 @@
 let pageContentEl = document.querySelector("#page-content");
 let timer = document.querySelector("#timer");
 let currentTime = 0;
+let currentQuestion = 0;
 let scores = [];
+
+const questions = [
+    {
+        question: "Sample Questioneeeeeeeeeeeeeeeeeewqg ewgf qreg qerg erg qer gqwe gfqwe fqwe qwe r",
+        answerOne: "Answer One",
+        answerTwo: "Answer Two",
+        answerThree: "Answer Three",
+        answerFour: "Answer Four",
+    },
+    {
+        question: "Sample Question Two",
+        answerOne: "Answer One",
+        answerTwo: "Answer Two",
+        answerThree: "Answer Three",
+        answerFour: "Answer Four",
+    },
+    {
+        question: "Sample Question Three",
+        answerOne: "Answer One",
+        answerTwo: "Answer Two",
+        answerThree: "Answer Three",
+        answerFour: "Answer Four",
+    },
+    {
+        question: "Sample Question Four",
+        answerOne: "Answer One",
+        answerTwo: "Answer Two",
+        answerThree: "Answer Three",
+        answerFour: "Answer Four",
+    },
+    {
+        question: "Sample Question Five",
+        answerOne: "Answer One",
+        answerTwo: "Answer Two",
+        answerThree: "Answer Three",
+        answerFour: "Answer Four",
+    },
+];
 
 // a button was clicked
 let buttonHandler = function(event) {
@@ -12,6 +51,56 @@ let buttonHandler = function(event) {
     if (targetEl.matches(".start-btn")) {
         beginQuiz();
     }
+}
+
+// start the quiz
+let beginQuiz = function() {
+    // set and start the timer
+    currentTime = 60;
+    timerManager();
+
+    // load the first question
+    displayQuestion();
+}
+
+// load a question
+let displayQuestion = function() {
+    clearScreen();
+
+    // create question region
+    var questionHolderEl = document.createElement("div");
+    questionHolderEl.className = "question-holder";
+    questionHolderEl.innerHTML = questions[currentQuestion].question;
+
+    // create the four answers
+    var answerButtonOneEl = document.createElement("button");
+    answerButtonOneEl.textContent = questions[currentQuestion].answerOne;
+    answerButtonOneEl.className = "btn answer-btn";
+    answerButtonOneEl.setAttribute("data-answer-id", "1");
+    var answerButtonTwoEl = document.createElement("button");
+    answerButtonTwoEl.textContent = questions[currentQuestion].answerTwo;
+    answerButtonTwoEl.className = "btn answer-btn";
+    answerButtonTwoEl.setAttribute("data-answer-id", "2");
+    var answerButtonThreeEl = document.createElement("button");
+    answerButtonThreeEl.textContent = questions[currentQuestion].answerThree;
+    answerButtonThreeEl.className = "btn answer-btn";
+    answerButtonThreeEl.setAttribute("data-answer-id", "3");
+    var answerButtonFourEl = document.createElement("button");
+    answerButtonFourEl.textContent = questions[currentQuestion].answerFour;
+    answerButtonFourEl.className = "btn answer-btn";
+    answerButtonFourEl.setAttribute("data-answer-id", "4");
+
+    // create the answer region
+    var answerHolderEl = document.createElement("div");
+    answerHolderEl.className = "answer-holder";
+    // append the four answers
+    answerHolderEl.appendChild(answerButtonOneEl);
+    answerHolderEl.appendChild(answerButtonTwoEl);
+    answerHolderEl.appendChild(answerButtonThreeEl);
+    answerHolderEl.appendChild(answerButtonFourEl);
+
+    pageContentEl.appendChild(questionHolderEl);
+    pageContentEl.appendChild(answerHolderEl);
 }
 
 let timerManager = function() {
@@ -25,15 +114,6 @@ let timerManager = function() {
             timer.innerHTML = "Time Remaining: " + currentTime--;
         }
     }, 1000)
-}
-
-// start the quiz
-let beginQuiz = function() {
-    clearScreen();
-
-    // set and start the timer
-    currentTime = 60;
-    timerManager();
 }
 
 // prompt us so we can save our score
